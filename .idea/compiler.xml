@@ -11,5 +11,11 @@
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
+    <bytecodeTargetLevel target="1.7">
+      <module name="heart-monitor-1.data" target="11" />
+      <module name="heart-monitor-1.injection" target="11" />
+      <module name="heart-monitor-1.phone-app" target="11" />
+      <module name="heart-monitor-1.wear-app" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

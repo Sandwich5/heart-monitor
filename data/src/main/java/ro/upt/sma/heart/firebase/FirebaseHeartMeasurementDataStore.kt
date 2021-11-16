@@ -15,15 +15,39 @@ class FirebaseHeartMeasurementDataStore(userId: String) : HeartMeasurementReposi
     private val reference: DatabaseReference = FirebaseDatabase.getInstance().reference.child(userId)
 
     override fun post(heartMeasurement: HeartMeasurement) {
-        TODO("Post the new value to firebase")
+        val timestamp = heartMeasurement.timestamp.toString();
+        val heartRate = heartMeasurement.value.toString();
+        reference.child(timestamp).setValue(heartRate)
     }
 
     override fun observe(listener: HeartMeasurementRepository.HeartChangedListener) {
-        TODO("Add a child event listener and pass the last value to the listener")
+        // DONE("Add a child event listener and pass the last value to the listener")
+        val addChildEventListener = reference.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                listener.onHeartChanged(toHeartMeasurement(snapshot))
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     override fun retrieveAll(listener: HeartMeasurementRepository.HeartListLoadedListener) {
-        TODO("Retrieve all measurements and pass them to the listener")
+        // DONE("Retrieve all measurements and pass them to the listener")
+        reference.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listener.onHeartListLoaded(toHeartMeasurements(snapshot.children))
+                reference.removeEventListener(this)
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
     }
 
 

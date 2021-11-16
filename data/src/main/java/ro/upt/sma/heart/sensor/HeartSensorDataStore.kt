@@ -11,11 +11,11 @@ import java.util.*
 
 class HeartSensorDataStore(context: Context) : HeartSensorRepository {
 
-    // TODO ("Get sensor manager service")
-    private val sensorManager: SensorManager? = null
+    // DONE ("Get sensor manager service")
+    private val sensorManager: SensorManager? = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-    // TODO ("Get a handle for the sensor")
-    private val heartRateSensor: Sensor? = null
+    // DONE ("Get a handle for the sensor")
+    private val heartRateSensor: Sensor? = sensorManager?.getDefaultSensor(Sensor.TYPE_HEART_RATE)
 
     private val listeners = HashMap<HeartSensorRepository.HeartRateListener, SensorEventListener>()
 
@@ -32,8 +32,8 @@ class HeartSensorDataStore(context: Context) : HeartSensorRepository {
             override fun onAccuracyChanged(sensor: Sensor, i: Int) {}
         }
 
-        TODO("Register sensor event listener with the sensor manager API")
-
+        // DONE("Register sensor event listener with the sensor manager API")
+        sensorManager?.registerListener(eventListener, heartRateSensor, SensorManager.SENSOR_DELAY_NORMAL)
 
         listeners[listener] = eventListener
     }
